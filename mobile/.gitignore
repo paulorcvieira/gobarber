@@ -2,6 +2,7 @@
 #
 .DS_Store
 commands.txt
+yarn.lock
 
 # Xcode
 #
@@ -37,6 +38,7 @@ local.properties
 # node.js
 #
 node_modules/
+coverage/
 npm-debug.log
 yarn-error.log
 

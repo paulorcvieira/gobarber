@@ -1,5 +1,5 @@
 <h1 align="center">
-	<img alt="GoStack" src=".github/logo.svg" width="200px" />
+	<img alt="GoStack" src=".github/logo.svg" width="190px" />
 </h1>
 
 <p align="center">
@@ -84,6 +84,9 @@ Já o prestador de serviço, através de um interface Web, consegue ter acesso a
 
   # Instalar as dependências:
   $ yarn
+
+  # Configurar a porta local com a porta virtual
+  $ adb reverse tcp:3333 tcp:3333
 
   # Rodar a aplicação:
   $ yarn ios ou yarn android
