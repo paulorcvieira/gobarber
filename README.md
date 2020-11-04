@@ -48,6 +48,9 @@ Já o prestador de serviço, através de um interface Web, consegue ter acesso a
 
   # Entrar no diretório:
   $ cd gobarber
+
+  # Iniciar Bancos de Dados
+  $ docker start redis mongodb postgres
 ```
 
 ## :gear: Iniciando back-end
