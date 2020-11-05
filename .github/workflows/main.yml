@@ -33,7 +33,15 @@ jobs:
       
       # Executar a build
       - name: Run build
-        run: yarn build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/app/gobarber/api
+            yarn build
       
       # Copiar código para dentro do servidor
       - name: Copy dist to server
