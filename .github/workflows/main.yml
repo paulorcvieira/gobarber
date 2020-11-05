@@ -43,4 +43,4 @@ jobs:
             yarn
             yarn build
             ./node_modules/.bin/typeorm migration:run
-            pm2 restart gobarber-api
+            pm2 restart server
