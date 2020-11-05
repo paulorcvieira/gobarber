@@ -19,29 +19,9 @@ jobs:
       - name: Install dependencies
         run: yarn
       
-      # Cache
-      - name: Get npm cache directory
-        id: npm-cache
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      
       # Executar a build
       - name: Run build
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ~/app/gobarber/api
-            yarn build
+        run: yarn build
       
       # Copiar código para dentro do servidor
       - name: Copy dist to server
@@ -55,7 +35,9 @@ jobs:
           target: "~/app/gobarber/api"
           
       # Executar "yarn" no servidor
-      - name: Install dependencies on server
+      # Executar as migrations do TypeORM
+      # Restart no servidor Node.js
+      - name: Run production scripts
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -65,26 +47,5 @@ jobs:
           script: |
             cd ~/app/gobarber/api
             yarn
-            
-      # Executar as migrations do TypeORM
-      - name: Run migrations on server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ~/app/gobarber/api
             ./node_modules/.bin/typeorm migration:run
-  
-      
-      # Restart no servidor Node.js
-      - name: Run migrations on server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: pm2 restart gobarber-api
+            pm2 restart gobarber-api
